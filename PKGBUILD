@@ -5,7 +5,7 @@
 
 pkgname=mkinitcpio
 pkgver=23
-pkgrel=2
+pkgrel=3
 pkgdesc="Modular initramfs image creation utility"
 arch=('any')
 url="https://projects.archlinux.org/mkinitcpio.git/"
@@ -20,19 +20,23 @@ makedepends=('asciidoc')
 provides=("mkinitcpio=${pkgver}-${pkgrel}")
 backup=('etc/mkinitcpio.conf')
 source=("https://sources.archlinux.org/other/${pkgname}/${pkgname}-$pkgver.tar.gz"
- 		'0002-remove-systemd.patch')
+ 		'0002-remove-systemd.patch'
+ 		'0001-make-ldd-parsing-compatible-with-upstream-glibc-chan.patch')
 install=mkinitcpio.install
-sha256sums=('913cd9f5629dff6c59e46ed9d44d5af8d4a0d2bddba0a1faffe716dc28bcf152'
-            '4921518d130b73724645b3732ba471005b8755a89a219bb6396e3b082414bb78')
+sha256sums=('80f12a07f0dceef81dfe87200f099bd2149e0990391dda6defebaa5697f8a35a'
+            '4921518d130b73724645b3732ba471005b8755a89a219bb6396e3b082414bb78'
+            'f534892af930abf8164eead271dc012e42a552362fbb459e55e04d4a68b52a66')
 validpgpkeys=('6DD4217456569BA711566AC7F06E8FDE7B45DAAC') # Eric Vidal
 
 prepare() {
+  
+  cd "$pkgname-$pkgver"
   #start removing systemd related stuff
-  local d=${srcdir}/${pkgname}-${pkgver}
-  [ ! -h "$d" ] && ln -s ${pkgname}-${pkgver} "$d"
-  [ ! -d "$d" ] && echo "!!!!! cannot locate dir '$d'" && exit 666
-  rm -rf ${d}/install/sd-vconsole ${d}/install/sd-shutdown ${d}/systemd ${d}/tmpfiles
-  patch -d "$pkgname-$pkgver" -Np1 <0002-remove-systemd.patch
+  rm -rf install/sd-vconsole install/sd-shutdown systemd tmpfiles
+  patch -p1 -i ../0002-remove-systemd.patch
+
+  patch -p1 -i ../0001-make-ldd-parsing-compatible-with-upstream-glibc-chan.patch
+
 }
 
 check() {
