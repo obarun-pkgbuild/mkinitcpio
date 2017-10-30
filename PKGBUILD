@@ -4,7 +4,7 @@
 # 						Maintainer: Thomas Bächler <thomas@archlinux.org>
 
 pkgname=mkinitcpio
-pkgver=23
+pkgver=24
 pkgrel=3
 pkgdesc="Modular initramfs image creation utility"
 arch=('any')
@@ -21,11 +21,11 @@ provides=("mkinitcpio=${pkgver}-${pkgrel}")
 backup=('etc/mkinitcpio.conf')
 source=("https://sources.archlinux.org/other/${pkgname}/${pkgname}-$pkgver.tar.gz"
  		'0002-remove-systemd.patch'
- 		'0001-make-ldd-parsing-compatible-with-upstream-glibc-chan.patch')
+ 		'0001-Restore-addition-of-modules-from-config-file.patch')
 install=mkinitcpio.install
-sha256sums=('80f12a07f0dceef81dfe87200f099bd2149e0990391dda6defebaa5697f8a35a'
+sha256sums=('ec0ecbc518c14ecacf5a8ece2f068fe86fcaf3aed09ee6b82737e773e5d7d02b'
             '4921518d130b73724645b3732ba471005b8755a89a219bb6396e3b082414bb78'
-            'f534892af930abf8164eead271dc012e42a552362fbb459e55e04d4a68b52a66')
+            '563bf9be83bc378ded0ecafef2954ffc6e4d2f8599fd3d4ff5523068b093114d')
 validpgpkeys=('6DD4217456569BA711566AC7F06E8FDE7B45DAAC') # Eric Vidal
 
 prepare() {
@@ -35,8 +35,7 @@ prepare() {
   rm -rf install/sd-vconsole install/sd-shutdown systemd tmpfiles
   patch -p1 -i ../0002-remove-systemd.patch
 
-  patch -p1 -i ../0001-make-ldd-parsing-compatible-with-upstream-glibc-chan.patch
-
+  patch -Np1 <"$srcdir"/0001-Restore-addition-of-modules-from-config-file.patch
 }
 
 check() {
