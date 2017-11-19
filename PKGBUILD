@@ -7,7 +7,7 @@ pkgname=mkinitcpio
 pkgver=24
 pkgrel=3
 pkgdesc="Modular initramfs image creation utility"
-arch=('any')
+arch=(x86_64)
 url="https://projects.archlinux.org/mkinitcpio.git/"
 license=('GPL')
 depends=('awk' 'mkinitcpio-busybox>=1.19.4-2' 'kmod' 'util-linux>=2.23' 'libarchive'
